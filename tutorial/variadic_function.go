@@ -19,8 +19,6 @@ func find(num int, nums ...int) {
 	fmt.Printf("\n")
 }
 func main() {
-	find(89, 89, 90, 95)
-	find(45, 56, 67, 45, 90, 109)
-	find(78, 38, 56, 98)
-	find(87)
+	nums := []int{89, 90, 95}
+	find(89, nums...)
 }
