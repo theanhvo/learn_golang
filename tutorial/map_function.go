@@ -5,6 +5,10 @@ import (
 )
 
 func main() {
+	// var luong map[string]string
+	luong := make(map[string]string)
+	luong["thang1"] = "1000"
+	fmt.Println(luong)
 	personSalary := map[string]int{
 		"steve": 12000,
 		"jamie": 15000,

@@ -1,0 +1,26 @@
+actions:
+  - run
+  - swim
+  - kick
+  
+person:
+  john:
+    name: John
+    info: 
+      address: HaNoi
+      age: 26
+      phone: 777
+    skills:
+      - php
+      - golang
+      - nodejs
+  trump:
+    name: Trump
+    info: 
+      address: SF
+      age: 27
+      phone: 888
+    skills:
+      - html
+      - javascript
+      - css

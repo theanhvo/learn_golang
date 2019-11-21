@@ -1,0 +1,26 @@
+defaults: NONE
+web: 
+  chrome: DASH
+  cococ: DASH
+  firefox: DASH
+  safari: HLS_fMP4
+
+tv: 
+  sony: 
+    ceb: SMOOTH
+    legacy: SMOOTH
+    opera_os: SMOOTH
+    android_tv_os: DASH
+  lg: 
+    webos: DASH
+    netcast: HLS_TS
+  samsung: 
+    tizen: DASH
+    legacy: SMOOTH
+  panasonic:
+    android_tv_os: DASH
+  android_tv: DASH
+
+mobile: 
+  iphone: HLS_TS
+  samsung: SMOOTH
