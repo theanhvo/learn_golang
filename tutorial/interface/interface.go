@@ -36,6 +36,7 @@ và tính tổng mức lương của từng nhân viên
 func totalExpense(s []SalaryCalculator) {
 	expense := 0
 	for _, v := range s {
+		fmt.Println(v)
 		expense = expense + v.CalculateSalary()
 	}
 	fmt.Printf("Total Expense Per Month $%d", expense)
@@ -46,6 +47,7 @@ func main() {
 	pemp2 := Permanent{2, 6000, 30}
 	cemp1 := Contract{3, 3000}
 	employees := []SalaryCalculator{pemp1, pemp2, cemp1}
+	// fmt.Println("Gia tri cua employee")
+	// fmt.Println(employees)
 	totalExpense(employees)
-
 }
