@@ -5,7 +5,8 @@ import (
 	"fmt"
 	// "github.com/go-redis/redis"
 	"github.com/labstack/echo"
-	// "log"
+	"log"
+	// "github.com/fatih/structs"
 	"net/http"
 	// "reflect"
 )
@@ -13,62 +14,35 @@ import (
 type City struct {
 	Name    string `json:"name"`
 	Authors []struct {
-		Name string `json:"name"`
-		Age  int    `json:"age"`
+		Name    string `json:"name"`
+		Age     int    `json:"age"`
+		Studies []struct {
+			Languages []string `json:"languages"`
+		} `json:"studies"`
+		OnDuty bool
 	} `json:"authors"`
 }
 
-var Data = `{"name": "hcm", "authors": [{"name": "duc_tri", "age": 18}, {"name": "theanh", "age": 18}]}`
+var Data = `{"name": "hcm", "authors": [
+    {"name": "duc_tri", "age": 18, "studies": [{"languages": ["eng", "zhe"]}]},
+    {"name": "theanh", "age": 20, "studies": [{"languages": ["eng", "fre"]}]}
+]}`
 
 func show(c echo.Context) error {
-	// client := redis.NewClient(&redis.Options{
-	// 	Addr:     "localhost:6379",
-	// 	Password: "",
-	// 	DB:       0,
-	// })
-
-	// param := c.Param("city")
-	// if param != "" {
-	// 	valueParam, exc := client.Get("city").Result()
-	// 	if exc != nil {
-	// 		fmt.Println(exc)
-	// 	}
-	// 	fmt.Println(valueParam)
-	// }
-
-	// json, err := json.Marshal(Author{Name: "Elliot", Age: 25})
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-
-	// err = client.Set("author", json, 0).Err()
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-	// val, err := client.Get("author").Result()
-	// if err != nil {
-	// 	fmt.Println(err)
-	// }
-	// fmt.Println(val)
-
-	// fmt.Println(c.Param("city"))
-
 	var city City
 	json.Unmarshal([]byte(Data), &city)
 	fmt.Println(city.Authors)
-	if city.Name == c.Param("city") {
-		for _, val := range city.Authors {
-			fmt.Println(val.Name)
+	pCity := &city
+	fmt.Println(pCity)
+	for i := 0; i < len(pCity.Authors); i++ {
+		if pCity.Authors[i].Age == 18 {
+			pCity.Authors[i].OnDuty = true
 		}
-
 	}
-
-	// ci := City{
-	// 	Name: city["name"].(string),
-	// }
-	// fmt.Println(ci.Name)
-
-	return c.String(http.StatusOK, Data)
+	var jsonData []byte
+	jsonData, _ = json.Marshal(pCity)
+	fmt.Println(string(jsonData))
+	return c.String(http.StatusOK, string(jsonData))
 }
 
 func main() {
