@@ -1,0 +1,18 @@
+app:
+  - mobile:
+    - reactJs
+    - reactNative
+    - Angular
+  - web:
+    - Login
+    - Logout
+services:
+  - workers:
+    - importUser
+    - importProduct
+  - cart:
+    - addProduct
+    - removeProduct
+    - quantity
+
+
