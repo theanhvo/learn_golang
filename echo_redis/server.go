@@ -5,13 +5,16 @@ import (
 	"fmt"
 	// "github.com/go-redis/redis"
 	"github.com/labstack/echo"
-	"log"
+	// "log"
 	// "github.com/fatih/structs"
 	"net/http"
 	// "reflect"
-	"database/sql"
-	_ "github.com/go-sql-driver/mysql"
+	// "database/sql"
+	"github.com/go-redis/redis/v7"
 )
+
+type RedisData struct {
+}
 
 type City struct {
 	Name    string `json:"name"`
@@ -36,11 +39,11 @@ var Data = `{"name": "hcm", "authors": [
 ]}`
 
 func show(c echo.Context) error {
+	tp := c.FormValue("city")
 	var city City
 	json.Unmarshal([]byte(Data), &city)
-	fmt.Println(city.Authors)
 	pCity := &city
-	fmt.Println(pCity)
+	pCity.Name = tp
 	for i := 0; i < len(pCity.Authors); i++ {
 		if pCity.Authors[i].Age == 18 {
 			pCity.Authors[i].OnDuty = true
@@ -48,7 +51,11 @@ func show(c echo.Context) error {
 	}
 	var jsonData []byte
 	jsonData, _ = json.Marshal(pCity)
-	fmt.Println(string(jsonData))
+	// err := client.Set("key", jsonData, 0).Err()
+	// if err != nil {
+	// 	panic(err)
+	// }
+
 	return c.String(http.StatusOK, string(jsonData))
 }
 
@@ -57,39 +64,22 @@ func showYml(c echo.Context) error {
 }
 
 func main() {
+	client := redis.NewClient(&redis.Options{
+		Addr:     "localhost:6379",
+		Password: "", // no password set
+		DB:       0,  // use default DB
+	})
+
 	e := echo.New()
 	e.GET("/", func(c echo.Context) error {
-		fmt.Println("Go MySQL Tutorial")
-
-		db, err := sql.Open("mysql", "root:123456@tcp(127.0.0.1:3306)/session")
-
+		getData, err := client.Get("students").Result()
 		if err != nil {
-			panic(err.Error())
+			panic(err)
 		}
-
-		defer db.Close()
-
-		results, err := db.Query("SELECT * FROM staging")
-		fmt.Println(results)
-		if err != nil {
-			panic(err.Error())
-		}
-		for results.Next() {
-			var staging Staging
-			// for each row, scan the result into our staging composite object
-			err = results.Scan(&staging.Name, &staging.Content)
-			if err != nil {
-				panic(err.Error()) // proper error handling instead of panic in your app
-			}
-			// and then print out the tag's Name attribute
-			log.Printf(staging.Name)
-		}
-		// defer get.Close()
-		return c.String(http.StatusOK, "Hello World!")
+		fmt.Println("key", getData)
+		return c.String(http.StatusOK, string(getData))
 	})
 	//Tạo kết nối với Redis
-	e.GET("/api/:city", show)
-	// e.GET("/users/:id", getUser)
-	e.GET("/api/:app", showYml)
+	e.POST("/api/city/create", show)
 	e.Logger.Fatal(e.Start(":1323"))
 }
